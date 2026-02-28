@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this analysis pipeline, please cite it as below."
+type: software
+title: "TP4 TNBC Transcriptomics Analysis Pipeline"
+abstract: "A comprehensive bioinformatics analysis pipeline for studying TP4-induced transcriptomic changes in triple-negative breast cancer cells using GSE74764 microarray data."
+authors:
+  - name: "TP4 TNBC Project Contributors"
+repository-code: "https://github.com/yourusername/TP4-TNBC-Transcriptomics"
+license: MIT
+keywords:
+  - bioinformatics
+  - transcriptomics
+  - triple-negative breast cancer
+  - TNBC
+  - antimicrobial peptides
+  - TP4
+  - differential expression
+  - pathway analysis
+  - R
+references:
+  - type: article
+    authors:
+      - family-names: Ting
+        given-names: CH
+      - family-names: Chen
+        given-names: YC
+      - family-names: Wu
+        given-names: CJ
+      - family-names: Chen
+        given-names: JY
+    title: "Targeting FOSB with a cationic antimicrobial peptide, TP4, for treatment of triple-negative breast cancer"
+    journal: Oncotarget
+    year: 2016
+    volume: 7
+    issue: 26
+    start: 40329
+    end: 40347
+    doi: "10.18632/oncotarget.9612"

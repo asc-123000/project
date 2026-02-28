@@ -1,0 +1,126 @@
+# =============================================================================
+# R / Bioinformatics Project .gitignore
+# =============================================================================
+
+# R Environment
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+
+# R Package development
+*.Rcheck/
+*.tar.gz
+.Rbuildignore
+
+# Session Data
+*.RDataTmp
+.Rproj.user
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+__pycache__/
+
+# =============================================================================
+# Data Files (typically too large for GitHub)
+# =============================================================================
+
+# Raw data files
+data/raw/*.gz
+data/raw/*.txt
+data/raw/*.csv
+data/raw/*.tsv
+data/raw/*.soft
+data/raw/*.CEL
+data/raw/*.cel
+
+# Processed data (can be regenerated)
+data/processed/*.rds
+data/processed/*.RData
+data/processed/*.csv
+data/processed/*.tsv
+
+# =============================================================================
+# Output Files (can be regenerated)
+# =============================================================================
+
+# Keep directory structure, ignore large outputs
+results/**/*.csv
+results/**/*.tsv
+results/**/*.xlsx
+!results/.gitkeep
+!results/**/.gitkeep
+
+# Figures (optional - comment out if you want to track figures)
+# figures/**/*.png
+# figures/**/*.pdf
+# figures/**/*.svg
+# !figures/.gitkeep
+# !figures/**/.gitkeep
+
+# =============================================================================
+# System and IDE Files
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# RStudio
+*.Rproj
+
+# JetBrains IDEs
+.idea/
+
+# =============================================================================
+# Temporary and Log Files
+# =============================================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Log files
+*.log
+
+# =============================================================================
+# Security (Never commit these!)
+# =============================================================================
+
+# API keys and credentials
+.env
+.env.local
+*.pem
+*.key
+credentials.json
+secrets.yaml
+
+# =============================================================================
+# Large files that shouldn't be on GitHub
+# =============================================================================
+
+# Database files
+*.db
+*.sqlite
+
+# Compressed archives
+*.zip
+*.rar
+*.7z
+
+# Large binary files
+*.bin
