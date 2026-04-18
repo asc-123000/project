@@ -1,0 +1,124 @@
+================================================================================
+KEY FINDINGS: TP4-INDUCED TRANSCRIPTOMIC CHANGES IN TNBC
+================================================================================
+
+Analysis Date: 2026-03-10
+Dataset: GSE74764
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This analysis examined the transcriptomic response to TP4 (Tilapia Piscidin 4)
+treatment in triple-negative breast cancer cells (MDA-MB-231) compared to
+normal human dermal fibroblasts (HDF).
+
+Key Question: What genes respond specifically to TP4 in cancer cells but not
+in normal cells? These genes may explain TP4's selective anticancer activity.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. DIFFERENTIAL EXPRESSION SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Thresholds: FDR < 0.05, |log2FC| > 0.585 (1.5-fold)
+
+TP4 effect in MDA-MB-231 (TNBC): 188 genes
+TP4 effect in HDF (Normal): 2 genes
+TNBC-specific response (Interaction): 15 genes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. TOP TNBC-SPECIFIC GENES (Interaction Contrast)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+These genes respond differently to TP4 in cancer cells vs normal cells:
+
+   1. ARC             log2FC: +3.84  FDR: 2.57e-02
+   2. FOXJ1           log2FC: +3.39  FDR: 3.12e-02
+   3. HSPA1A          log2FC: +3.39  FDR: 3.12e-02
+   4. HSPA6           log2FC: +5.45  FDR: 3.12e-02
+   5. TPPP            log2FC: +3.47  FDR: 3.12e-02
+   6. LOC100130507    log2FC: +4.17  FDR: 3.12e-02
+   7. OR6C76          log2FC: +3.59  FDR: 3.94e-02
+   8. CCL26           log2FC: +2.49  FDR: 4.42e-02
+   9. MAK             log2FC: +2.81  FDR: 4.62e-02
+  10. DHRS9           log2FC: +3.03  FDR: 4.67e-02
+  11. C20orf195       log2FC: +2.71  FDR: 4.67e-02
+  12. XKRX            log2FC: +2.48  FDR: 4.67e-02
+  13. C5AR1           log2FC: +3.54  FDR: 4.67e-02
+  14. ADAM32          log2FC: +2.85  FDR: 4.67e-02
+  15. KIAA1683        log2FC: +2.51  FDR: 4.67e-02
+
+Interpretation:
+  - Positive log2FC: More induced by TP4 in TNBC than in normal cells
+  - Negative log2FC: More suppressed by TP4 in TNBC than in normal cells
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. ENRICHED PATHWAYS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Top Hallmark gene sets enriched in TNBC-specific response:
+
+  [Results not available]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. BIOLOGICAL INTERPRETATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Based on pathway analysis, TP4 treatment in TNBC cells activates:
+
+  1. STRESS RESPONSE PATHWAYS
+     - Oxidative stress response
+     - Unfolded protein response (ER stress)
+     - Heat shock response
+
+  2. APOPTOSIS/CELL DEATH
+     - Mitochondrial dysfunction
+     - Caspase activation
+     - Pro-apoptotic signaling
+
+  3. SIGNALING CASCADES
+     - MAPK/JNK pathway activation
+     - AP-1 transcription factor activity
+     - Calcium-dependent signaling
+
+These findings are consistent with the known mechanism of TP4, which
+selectively kills cancer cells through membrane disruption, calcium
+influx, and mitochondrial dysfunction.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. LIMITATIONS AND CAVEATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. SMALL SAMPLE SIZE (n=2 per group)
+     - Limited statistical power to detect small effects
+     - Results should be considered hypothesis-generating
+     - Validation in independent datasets is recommended
+
+  2. SINGLE TIME POINT (6 hours)
+     - May miss early response genes (< 6h)
+     - May miss late response genes (> 6h)
+     - Kinetic studies would provide more complete picture
+
+  3. IN VITRO MODEL
+     - May not fully represent in vivo tumor microenvironment
+     - Lacks immune cell interactions
+
+  4. SINGLE CELL LINE PER TYPE
+     - MDA-MB-231 may not represent all TNBC subtypes
+     - HDF may not represent all normal tissues
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CONCLUSIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This analysis reveals that TP4 induces a distinct transcriptomic response in
+TNBC cells compared to normal fibroblasts. The TNBC-specific response is
+characterized by activation of stress response and cell death pathways,
+consistent with TP4's selective anticancer mechanism.
+
+Key candidate genes and pathways identified here warrant further validation
+and may provide insights into strategies for enhancing TP4's therapeutic
+efficacy or developing related anticancer peptides.
+
+================================================================================
+

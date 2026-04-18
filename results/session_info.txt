@@ -1,0 +1,125 @@
+================================================================================
+SESSION INFORMATION
+================================================================================
+
+Analysis completed:  2026-03-10 04:59:40 
+
+R VERSION:
+               _                                
+platform       x86_64-w64-mingw32               
+arch           x86_64                           
+os             mingw32                          
+crt            ucrt                             
+system         x86_64, mingw32                  
+status                                          
+major          4                                
+minor          5.1                              
+year           2025                             
+month          06                               
+day            13                               
+svn rev        88306                            
+language       R                                
+version.string R version 4.5.1 (2025-06-13 ucrt)
+nickname       Great Square Root                
+
+
+LOADED PACKAGES:
+R version 4.5.1 (2025-06-13 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
+
+time zone: Africa/Cairo
+tzcode source: internal
+
+attached base packages:
+[1] stats4    grid      stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ComplexHeatmap_2.26.1  GO.db_3.22.0           fgsea_1.36.2           msigdbr_25.1.1         ReactomePA_1.54.0     
+ [6] DOSE_4.4.0             enrichplot_1.30.4      clusterProfiler_4.18.4 hgu133plus2.db_3.13.0  org.Hs.eg.db_3.22.0   
+[11] AnnotationDbi_1.72.0   IRanges_2.44.0         S4Vectors_0.48.0       affy_1.88.0            limma_3.66.0          
+[16] GEOquery_2.78.0        Biobase_2.70.0         BiocGenerics_0.56.0    generics_0.1.4         DT_0.34.0             
+[21] rmarkdown_2.30         knitr_1.51             openxlsx_4.2.8.1       here_1.0.2             ggpubr_0.6.2          
+[26] broom_1.0.11           VennDiagram_1.8.2      futile.logger_1.4.3    circlize_0.4.17        cowplot_1.2.0         
+[31] scales_1.4.0           gridExtra_2.3          ggrepel_0.9.6          viridis_0.6.5          viridisLite_0.4.2     
+[36] RColorBrewer_1.1-3     pheatmap_1.0.13        data.table_1.17.8      lubridate_1.9.4        forcats_1.0.1         
+[41] stringr_1.6.0          dplyr_1.1.4            purrr_1.2.0            readr_2.1.6            tidyr_1.3.1           
+[46] tibble_3.3.0           ggplot2_4.0.1          tidyverse_2.0.0       
+
+loaded via a namespace (and not attached):
+  [1] splines_4.5.1               ggplotify_0.1.3             R.oo_1.27.1                 polyclip_1.10-7            
+  [5] preprocessCore_1.72.0       graph_1.88.1                XML_3.99-0.20               httr2_1.2.1                
+  [9] lifecycle_1.0.4             rstatix_0.7.3               doParallel_1.0.17           rprojroot_2.1.1            
+ [13] MASS_7.3-65                 lattice_0.22-7              backports_1.5.0             magrittr_2.0.4             
+ [17] otel_0.2.0                  ggtangle_0.1.1              zip_2.3.3                   pkgbuild_1.4.8             
+ [21] DBI_1.2.3                   abind_1.4-8                 GenomicRanges_1.62.0        R.utils_2.13.0             
+ [25] ggraph_2.2.2                yulab.utils_0.2.3           tweenr_2.0.3                rappdirs_0.3.3             
+ [29] gdtools_0.4.4               tidytree_0.4.7              rentrez_1.2.4               reactome.db_1.95.0         
+ [33] codetools_0.2-20            DelayedArray_0.36.0         ggforce_0.5.0               xml2_1.5.0                 
+ [37] tidyselect_1.2.1            shape_1.4.6.1               aplot_0.2.9                 farver_2.1.2               
+ [41] matrixStats_1.5.0           Seqinfo_1.0.0               jsonlite_2.0.0              GetoptLong_1.1.0           
+ [45] tidygraph_1.3.1             Formula_1.2-5               iterators_1.0.14            systemfonts_1.3.1          
+ [49] foreach_1.5.2               tools_4.5.1                 ggnewscale_0.5.2            ragg_1.5.0                 
+ [53] treeio_1.34.0               snow_0.4-4                  Rcpp_1.1.0                  glue_1.8.0                 
+ [57] SparseArray_1.10.3          xfun_0.56                   qvalue_2.42.0               MatrixGenerics_1.22.0      
+ [61] withr_3.0.2                 formatR_1.14                BiocManager_1.30.27         fastmap_1.2.0              
+ [65] digest_0.6.39               timechange_0.3.0            R6_2.6.1                    gridGraphics_0.5-1         
+ [69] textshaping_1.0.4           colorspace_2.1-2            RSQLite_2.4.4               R.methodsS3_1.8.2          
+ [73] fontLiberation_0.1.0        graphlayouts_1.2.2          httr_1.4.7                  htmlwidgets_1.6.4          
+ [77] S4Arrays_1.10.0             scatterpie_0.2.6            graphite_1.56.0             pkgconfig_2.0.3            
+ [81] gtable_0.3.6                blob_1.2.4                  S7_0.2.1                    XVector_0.50.0             
+ [85] htmltools_0.5.9             fontBitstreamVera_0.1.1     carData_3.0-5               clue_0.3-67                
+ [89] png_0.1-8                   ggfun_0.2.0                 lambda.r_1.2.4              rstudioapi_0.17.1          
+ [93] rjson_0.2.23                tzdb_0.5.0                  reshape2_1.4.5              curl_7.0.0                 
+ [97] nlme_3.1-168                cachem_1.1.0                GlobalOptions_0.1.3         parallel_4.5.1             
+[101] pillar_1.11.1               vctrs_0.6.5                 tidydr_0.0.6                car_3.1-3                  
+[105] cluster_2.1.8.1             evaluate_1.0.5              cli_3.6.5                   compiler_4.5.1             
+[109] futile.options_1.0.1        rlang_1.1.6                 crayon_1.5.3                ggsignif_0.6.4             
+[113] labeling_0.4.3              plyr_1.8.9                  fs_1.6.6                    ggiraph_0.9.3              
+[117] stringi_1.8.7               BiocParallel_1.44.0         babelgene_22.9              assertthat_0.2.1           
+[121] Biostrings_2.78.0           lazyeval_0.2.2              GOSemSim_2.36.0             fontquiver_0.2.1           
+[125] Matrix_1.7-3                hms_1.1.4                   patchwork_1.3.2             bit64_4.6.0-1              
+[129] KEGGREST_1.50.0             statmod_1.5.1               SummarizedExperiment_1.40.0 igraph_2.2.1               
+[133] memoise_2.0.1               affyio_1.80.0               ggtree_4.0.4                fastmatch_1.1-8            
+[137] bit_4.6.0                   gson_0.1.0                  ape_5.8-1                  
+
+
+BIOCONDUCTOR VERSION:
+[1] ‘3.22’
+
+
+PROJECT PATHS:
+   root :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics 
+   data :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/data 
+   raw :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/data/raw 
+   processed :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/data/processed 
+   scripts :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/scripts 
+   results :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/results 
+   deg_tables :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/results/DEG_tables 
+   enrichment :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/results/enrichment 
+   figures :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/figures 
+   figures_qc :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/figures/QC 
+   figures_de :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/figures/DE 
+   figures_pathways :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/figures/pathways 
+   docs :  C:/Users/eltanany 01007675193/OneDrive/Desktop/Powerful Tool/TP4_TNBC_Transcriptiomics/docs 
+
+
+ANALYSIS PARAMETERS:
+   geo_accession :  GSE74764 
+   platform :  GPL16699 
+   fdr_threshold :  0.05 
+   log2fc_threshold :  0.585 
+   cell_lines :  MDA-MB-231, HDF 
+   treatments :  Mock, TP4 
+   focus_pathways :  apoptosis, cell death, stress response, MAPK signaling, calcium signaling, mitochondria, oxidative stress, ER stress, autophagy 
+   plot_width :  8 
+   plot_height :  6 
+   plot_dpi :  300 
+   colors : [list]

@@ -28,11 +28,24 @@
 ################################################################################
 
 # =============================================================================
-# 1. SETUP
+# 1. SETUP (Windows/RStudio Compatible)
 # =============================================================================
 
-# Source the setup script
-source("scripts/00_setup.R")
+# Find and source the setup script (works from any working directory)
+local({
+  paths_to_try <- c(
+    "scripts/00_setup.R",
+    "00_setup.R",
+    "../scripts/00_setup.R"
+  )
+  if (requireNamespace("here", quietly = TRUE)) {
+    paths_to_try <- c(here::here("scripts", "00_setup.R"), paths_to_try)
+  }
+  for (p in paths_to_try) {
+    if (file.exists(p)) { source(p); return() }
+  }
+  stop("Cannot find 00_setup.R. Please set working directory to project root.")
+})
 
 # Load required packages
 library(ggplot2)
@@ -59,11 +72,40 @@ message("\n")
 
 message("--- Loading Analysis Results ---\n")
 
-# Load all outputs
-preproc_output <- readRDS(file.path(PATHS$processed, "02_preprocessing_output.rds"))
-qc_output <- readRDS(file.path(PATHS$processed, "03_qc_output.rds"))
-de_output <- readRDS(file.path(PATHS$processed, "04_de_output.rds"))
-functional_output <- readRDS(file.path(PATHS$processed, "05_functional_output.rds"))
+# Helper function to load with error checking
+load_required_file <- function(filepath, description) {
+  if (!file.exists(filepath)) {
+    stop(
+      "Required file not found: ", basename(filepath), "\n",
+      "  File: ", filepath, "\n",
+      "  Please run the ", description, " script first.\n",
+      "  Or run: run_pipeline() to execute all scripts in order.",
+      call. = FALSE
+    )
+  }
+  readRDS(filepath)
+}
+
+# Load all outputs with error checking
+preproc_output <- load_required_file(
+  file.path(PATHS$processed, "02_preprocessing_output.rds"),
+  "02_preprocessing.R"
+)
+
+qc_output <- load_required_file(
+  file.path(PATHS$processed, "03_qc_output.rds"),
+  "03_quality_control.R"
+)
+
+de_output <- load_required_file(
+  file.path(PATHS$processed, "04_de_output.rds"),
+  "04_differential_expression.R"
+)
+
+functional_output <- load_required_file(
+  file.path(PATHS$processed, "05_functional_output.rds"),
+  "05_functional_analysis.R"
+)
 
 # Extract key objects
 expr_gene <- preproc_output$expression_gene
@@ -311,8 +353,11 @@ anno_colors <- list(
 )
 
 # Create heatmap using pheatmap
+# Use pheatmap package directly to avoid ComplexHeatmap S4 override issues
+
+# Save as PDF - call pheatmap directly in device context
 pdf(file.path(PATHS$figures, "Figure3_Heatmap.pdf"), width = 10, height = 14)
-pheatmap(
+pheatmap::pheatmap(
   heatmap_scaled,
   clustering_method = "complete",
   clustering_distance_rows = "correlation",
@@ -332,10 +377,10 @@ pheatmap(
 )
 dev.off()
 
-# Also save as PNG
+# Save as PNG
 png(file.path(PATHS$figures, "Figure3_Heatmap.png"), 
     width = 10, height = 14, units = "in", res = 300)
-pheatmap(
+pheatmap::pheatmap(
   heatmap_scaled,
   clustering_method = "complete",
   clustering_distance_rows = "correlation",
@@ -349,7 +394,7 @@ pheatmap(
   show_colnames = TRUE,
   fontsize_row = 6,
   fontsize_col = 9,
-  main = "Differentially Expressed Genes",
+  main = "Differentially Expressed Genes\n(Top genes from Interaction and MDA contrasts)",
   treeheight_row = 40,
   treeheight_col = 30
 )
@@ -624,8 +669,36 @@ if (length(key_genes_present) >= 5) {
   key_heatmap_data <- expr_gene[key_genes_present, ]
   key_heatmap_scaled <- t(scale(t(key_heatmap_data)))
   
+  # Save as PDF - call pheatmap directly in device context to avoid S4 issues
   pdf(file.path(PATHS$figures, "Figure7_KeyGenes.pdf"), width = 8, height = 10)
-  pheatmap(
+  pheatmap::pheatmap(
+    key_heatmap_scaled,
+    clustering_method = "complete",
+    clustering_distance_rows = "correlation",
+    clustering_distance_cols = "euclidean",
+    annotation_col = sample_anno,
+    annotation_colors = list(
+      cell_line = colors_cellline,
+      treatment = colors_treatment
+    ),
+    color = colorRampPalette(rev(brewer.pal(11, "RdBu")))(100),
+    breaks = seq(-2, 2, length.out = 101),
+    show_rownames = TRUE,
+    show_colnames = TRUE,
+    fontsize_row = 10,
+    fontsize_col = 9,
+    main = "Expression of Key Pathway Genes\n(Apoptosis, Stress Response, MAPK/AP-1)",
+    treeheight_row = 30,
+    treeheight_col = 20,
+    cellheight = 15,
+    cellwidth = 40
+  )
+  dev.off()
+  
+  # Save as PNG
+  png(file.path(PATHS$figures, "Figure7_KeyGenes.png"), 
+      width = 8, height = 10, units = "in", res = 300)
+  pheatmap::pheatmap(
     key_heatmap_scaled,
     clustering_method = "complete",
     clustering_distance_rows = "correlation",

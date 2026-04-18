@@ -264,6 +264,14 @@ TP4_TNBC_Transcriptomics/
 - **RStudio** (recommended)
 - Internet connection (for package installation and GEO download)
 
+### Windows-Specific Requirements
+
+> **Important for Windows users:** Some Bioconductor packages require compilation. You may need to install **Rtools**:
+> 
+> 1. Download Rtools from: https://cran.r-project.org/bin/windows/Rtools/
+> 2. Run the installer and follow the prompts
+> 3. Restart RStudio after installation
+
 ### Step 1: Clone/Download the Project
 
 ```bash
@@ -306,7 +314,25 @@ install_all_packages()
 
 ## Running the Pipeline
 
-### Quick Start (All Scripts)
+### Quick Start (Recommended for Windows/RStudio)
+
+The easiest way to run the entire analysis on Windows is using the master runner script:
+
+```r
+# Open run_analysis.R in RStudio and click "Source", OR:
+source("run_analysis.R")
+
+# Then run the full pipeline:
+run_pipeline()
+```
+
+This script automatically:
+- Sets the correct working directory
+- Checks for Rtools (Windows only)
+- Installs missing packages
+- Runs all analysis scripts in sequence
+
+### Alternative: Manual Execution
 
 ```r
 # Set working directory to project root
@@ -600,5 +626,6 @@ colors_direction <- c("Up" = "#E41A1C", "Down" = "#377EB8", "NS" = "#999999")
 *Last updated: January 2026*
 
 *This pipeline was designed for research-grade bioinformatics analysis following best practices for microarray data analysis and cancer genomics research.*
-#   p r o j e c t  
+#   p r o j e c t 
+ 
  

@@ -45,11 +45,24 @@
 ################################################################################
 
 # =============================================================================
-# 1. SETUP
+# 1. SETUP (Windows/RStudio Compatible)
 # =============================================================================
 
-# Source the setup script
-source("scripts/00_setup.R")
+# Find and source the setup script (works from any working directory)
+local({
+  paths_to_try <- c(
+    "scripts/00_setup.R",
+    "00_setup.R",
+    "../scripts/00_setup.R"
+  )
+  if (requireNamespace("here", quietly = TRUE)) {
+    paths_to_try <- c(here::here("scripts", "00_setup.R"), paths_to_try)
+  }
+  for (p in paths_to_try) {
+    if (file.exists(p)) { source(p); return() }
+  }
+  stop("Cannot find 00_setup.R. Please set working directory to project root.")
+})
 
 # Load required packages
 library(clusterProfiler)
@@ -228,17 +241,26 @@ run_kegg_enrichment <- function(genes_entrez, name, universe = NULL) {
   
   message("  Running KEGG for ", name, "...")
   
-  kegg <- enrichKEGG(
-    gene = genes_entrez,
-    universe = universe,
-    organism = "hsa",
-    pvalueCutoff = 0.05,
-    qvalueCutoff = 0.1
-  )
+  # Wrap in tryCatch to handle network errors gracefully
+  kegg <- tryCatch({
+    enrichKEGG(
+      gene = genes_entrez,
+      universe = universe,
+      organism = "hsa",
+      pvalueCutoff = 0.05,
+      qvalueCutoff = 0.1
+    )
+  }, error = function(e) {
+    message("  WARNING: KEGG analysis failed for ", name, ": ", e$message)
+    message("  (KEGG servers may be unavailable - skipping)")
+    return(NULL)
+  })
   
   # Convert Entrez IDs to symbols for readability
   if (!is.null(kegg) && nrow(kegg) > 0) {
-    kegg <- setReadable(kegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+    kegg <- tryCatch({
+      setReadable(kegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+    }, error = function(e) kegg)
   }
   
   return(kegg)
@@ -258,7 +280,7 @@ kegg_results[["Interaction"]] <- run_kegg_enrichment(
   entrez_lists[["Interaction"]], "Interaction", universe_entrez
 )
 
-message("✓ KEGG analysis complete")
+message("✓ KEGG analysis complete (some may have been skipped due to network issues)")
 
 # =============================================================================
 # 6. REACTOME PATHWAY ANALYSIS
@@ -274,14 +296,21 @@ run_reactome_enrichment <- function(genes_entrez, name, universe = NULL) {
   
   message("  Running Reactome for ", name, "...")
   
-  reactome <- enrichPathway(
-    gene = genes_entrez,
-    universe = universe,
-    organism = "human",
-    pvalueCutoff = 0.05,
-    qvalueCutoff = 0.1,
-    readable = TRUE
-  )
+  # Wrap in tryCatch to handle network errors gracefully
+  reactome <- tryCatch({
+    enrichPathway(
+      gene = genes_entrez,
+      universe = universe,
+      organism = "human",
+      pvalueCutoff = 0.05,
+      qvalueCutoff = 0.1,
+      readable = TRUE
+    )
+  }, error = function(e) {
+    message("  WARNING: Reactome analysis failed for ", name, ": ", e$message)
+    message("  (Reactome servers may be unavailable - skipping)")
+    return(NULL)
+  })
   
   return(reactome)
 }
@@ -391,16 +420,23 @@ prepare_ranked_list <- function(contrast_name) {
 run_fgsea <- function(ranked_list, genesets, contrast_name) {
   message("  Running GSEA for ", contrast_name, "...")
   
-  result <- fgsea(
-    pathways = genesets,
-    stats = ranked_list,
-    minSize = 15,
-    maxSize = 500,
-    nperm = 10000
-  )
+  result <- tryCatch({
+    fgsea(
+      pathways = genesets,
+      stats = ranked_list,
+      minSize = 15,
+      maxSize = 500
+      # nperm removed to use fgseaMultilevel algorithm
+    )
+  }, error = function(e) {
+    message("  WARNING: GSEA failed for ", contrast_name, ": ", e$message)
+    return(data.frame())
+  })
   
-  # Sort by NES
-  result <- result[order(result$NES, decreasing = TRUE), ]
+  # Sort by NES if results exist
+  if (nrow(result) > 0) {
+    result <- result[order(result$NES, decreasing = TRUE), ]
+  }
   
   return(result)
 }
@@ -496,7 +532,7 @@ message("\n--- Saving Enrichment Results ---\n")
 
 # Function to save enrichment result
 save_enrichment <- function(result, name, subdir = "") {
-  if (is.null(result) || (is.data.frame(result) && nrow(result) == 0)) {
+  if (is.null(result)) {
     return()
   }
   
@@ -512,10 +548,30 @@ save_enrichment <- function(result, name, subdir = "") {
     return()
   }
   
-  if (nrow(df) > 0) {
+  # Check if dataframe is empty
+  if (nrow(df) == 0) {
+    return()
+  }
+  
+  # Handle list columns (e.g., leadingEdge from fgsea) by converting to strings
+  for (col in names(df)) {
+    if (is.list(df[[col]])) {
+      df[[col]] <- sapply(df[[col]], function(x) {
+        if (is.null(x) || length(x) == 0) {
+          return("")
+        }
+        paste(x, collapse = ";")
+      })
+    }
+  }
+  
+  # Write to CSV with error handling
+  tryCatch({
     write.csv(df, file.path(outdir, paste0(name, ".csv")), row.names = FALSE)
     message("  ✓ ", file.path(subdir, paste0(name, ".csv")))
-  }
+  }, error = function(e) {
+    message("  WARNING: Could not save ", name, ": ", e$message)
+  })
 }
 
 # Save GO results

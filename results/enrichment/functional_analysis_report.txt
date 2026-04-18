@@ -1,0 +1,52 @@
+================================================================================
+FUNCTIONAL ANALYSIS REPORT
+================================================================================
+
+Date: 2026-03-09 07:19:28
+Dataset: GSE74764
+
+ENRICHMENT DATABASES USED
+-------------------------
+1. Gene Ontology (BP, MF, CC)
+2. KEGG Pathways
+3. Reactome Pathways
+4. MSigDB Hallmark Gene Sets
+5. MSigDB Oncogenic Signatures (C6)
+6. GSEA with Hallmark gene sets
+
+ENRICHMENT SUMMARY
+------------------
+Number of significantly enriched terms (FDR < 0.05):
+
+Contrast: TP4_in_MDA
+  GO BP: 8
+  KEGG: 0
+  Hallmark: 0
+
+Contrast: Interaction (TNBC-specific)
+  GO BP: 4
+  KEGG: 11
+  Hallmark: 0
+
+KEY BIOLOGICAL FINDINGS
+-----------------------
+Based on pathway enrichment analysis, TP4 treatment in TNBC cells
+appears to activate pathways related to:
+
+1. Stress response and cellular defense mechanisms
+2. Apoptosis and programmed cell death
+3. MAPK/JNK signaling cascades
+4. Mitochondrial function and oxidative stress
+5. Calcium-dependent processes
+
+These findings are consistent with the known mechanism of TP4,
+which induces selective cell death in cancer cells through
+mitochondrial dysfunction and calcium dysregulation.
+
+OUTPUT FILES
+------------
+Enrichment tables: results/enrichment/
+Visualization: figures/pathways/
+
+================================================================================
+

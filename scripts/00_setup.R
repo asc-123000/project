@@ -17,7 +17,7 @@
 # Author: Computational Biology Pipeline
 # Date: 2026-01-19
 #
-################################################################################
+#######################################################
 
 # =============================================================================
 # 1. SET GLOBAL OPTIONS
@@ -33,27 +33,55 @@ options(scipen = 999)
 set.seed(42)
 
 # =============================================================================
-# 2. DEFINE PROJECT PATHS
+# 2. DEFINE PROJECT PATHS (Windows/RStudio Compatible)
 # =============================================================================
 
 # Get the script directory and set project root
-# This allows the pipeline to run from any working directory
+# This allows the pipeline to run from any working directory on Windows/Mac/Linux
 get_project_root <- function() {
-  # Try to get script path if running via source()
+  # Method 1: Try 'here' package if available (most reliable)
+  if (requireNamespace("here", quietly = TRUE)) {
+    root <- here::here()
+    if (file.exists(file.path(root, "scripts", "00_setup.R"))) {
+      return(normalizePath(root, winslash = "/"))
+    }
+  }
+  
+  # Method 2: Try rstudioapi if running in RStudio
+  if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+    script_path <- tryCatch({
+      dirname(rstudioapi::getActiveDocumentContext()$path)
+    }, error = function(e) NULL)
+    
+    if (!is.null(script_path) && nzchar(script_path)) {
+      if (basename(script_path) == "scripts") {
+        return(normalizePath(dirname(script_path), winslash = "/"))
+      }
+    }
+  }
+  
+  # Method 3: Try to get script path if running via source()
   script_path <- tryCatch({
     dirname(sys.frame(1)$ofile)
-  }, error = function(e) {
-    # If that fails, use current working directory
-    getwd()
-  })
+  }, error = function(e) NULL)
   
-  # Navigate up from scripts/ to project root
-  if (basename(script_path) == "scripts") {
-    return(dirname(script_path))
-  } else {
-    # Assume we're in project root
-    return(script_path)
+  if (!is.null(script_path) && nzchar(script_path)) {
+    if (basename(script_path) == "scripts") {
+      return(normalizePath(dirname(script_path), winslash = "/"))
+    }
   }
+  
+  # Method 4: Check if current working directory is project root or scripts folder
+  cwd <- getwd()
+  if (file.exists(file.path(cwd, "scripts", "00_setup.R"))) {
+    return(normalizePath(cwd, winslash = "/"))
+  }
+  if (basename(cwd) == "scripts" && file.exists(file.path(cwd, "00_setup.R"))) {
+    return(normalizePath(dirname(cwd), winslash = "/"))
+  }
+  
+  # Fallback: use current working directory
+  return(normalizePath(cwd, winslash = "/"))
 }
 
 # Define project structure
@@ -119,6 +147,49 @@ install_bioc_packages <- function(packages) {
   }
 }
 
+#' Check if Rtools is installed (Windows only)
+#' @return TRUE if Rtools is found or not on Windows, FALSE otherwise
+check_rtools <- function(warn = TRUE) {
+  if (.Platform$OS.type != "windows") {
+    return(TRUE)  # Not needed on non-Windows
+  }
+  
+  # Check via pkgbuild if available
+  if (requireNamespace("pkgbuild", quietly = TRUE)) {
+    has_rtools <- pkgbuild::has_rtools()
+    if (has_rtools) {
+      message("Rtools detected via pkgbuild.")
+      return(TRUE)
+    }
+  }
+  
+  # Manual check for common Rtools paths
+  rtools_paths <- c(
+    "C:/rtools44",
+    "C:/rtools43", 
+    "C:/rtools42",
+    "C:/rtools40",
+    "C:/Rtools"
+  )
+  
+  for (path in rtools_paths) {
+    if (dir.exists(path)) {
+      message("Rtools found at: ", path)
+      return(TRUE)
+    }
+  }
+  
+  if (warn) {
+    warning(
+      "Rtools not detected on this Windows system.\n",
+      "Some Bioconductor packages may fail to install.\n",
+      "Download Rtools from: https://cran.r-project.org/bin/windows/Rtools/\n",
+      call. = FALSE
+    )
+  }
+  return(FALSE)
+}
+
 # =============================================================================
 # 4. REQUIRED PACKAGES
 # =============================================================================
@@ -137,6 +208,8 @@ cran_packages <- c(
   "gridExtra",      # Arrange multiple plots
   "scales",         # Scale functions for ggplot2
   "cowplot",        # Publication-ready plots
+  "circlize",       # Circular visualizations
+  "VennDiagram",    # Venn diagrams
   
   # Statistical
   "broom",          # Tidy statistical results
@@ -173,11 +246,13 @@ bioc_packages <- c(
   "fgsea",           # Fast GSEA
   "GO.db",           # GO database
   
-  # Quality control
-  "arrayQualityMetrics", # Array QC (optional, may have dependencies)
+  # Visualization
+  "ComplexHeatmap",  # Advanced heatmaps
   
   # Utilities
   "Biobase"          # Core Bioconductor classes
+  
+  # Note: arrayQualityMetrics removed - not available for Bioconductor 3.22+
 )
 
 # =============================================================================
@@ -188,6 +263,12 @@ install_all_packages <- function() {
   message("\n", paste(rep("=", 60), collapse = ""))
   message("INSTALLING REQUIRED PACKAGES")
   message(paste(rep("=", 60), collapse = ""), "\n")
+  
+  # Check for Rtools on Windows (needed for some package compilation)
+  if (.Platform$OS.type == "windows") {
+    message("\n--- Checking Windows Requirements ---\n")
+    check_rtools(warn = TRUE)
+  }
   
   # Install CRAN packages
   message("\n--- CRAN Packages ---\n")

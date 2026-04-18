@@ -1,0 +1,55 @@
+================================================================================
+QUALITY CONTROL REPORT
+================================================================================
+
+Date: 2026-03-08 15:06:29
+Dataset: GSE74764
+
+DATA DIMENSIONS
+---------------
+Features (genes): 29380
+Samples: 8
+
+EXPRESSION DISTRIBUTION
+-----------------------
+Range: [1.56, 19.46]
+Median CV across samples: 1.42%
+Assessment: GOOD
+
+PRINCIPAL COMPONENT ANALYSIS
+----------------------------
+PC1: 45.2% variance
+PC2: 15.2% variance
+PC3: 13.4% variance
+Top 3 PCs explain: 73.8% of variance
+
+PC-Factor Associations (p-values):
+  Cell Line: PC1=0.0000719, PC2=0.624
+  Treatment: PC1=0.94, PC2=0.344
+
+SAMPLE CORRELATIONS
+-------------------
+Mean within-group correlation: 0.99
+Mean between-group correlation: 0.953
+Assessment: GOOD - samples cluster by group
+
+OUTLIER ASSESSMENT
+------------------
+Potential outliers: None detected
+
+CONCLUSION
+----------
+Data quality appears GOOD. Proceed with differential expression analysis.
+
+GENERATED FIGURES
+-----------------
+1. density_by_sample.pdf/png - Expression density plots
+2. boxplot_by_sample.pdf/png - Expression boxplots
+3. PCA_main.pdf/png - Principal component analysis
+4. sample_correlation_heatmap.pdf/png - Sample correlations
+5. sample_dendrogram.pdf - Hierarchical clustering
+6. heatmap_top_variable_genes.pdf - Variable gene heatmap
+7. scree_plot.pdf - PCA variance explained
+
+================================================================================
+

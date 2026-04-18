@@ -62,11 +62,24 @@
 ################################################################################
 
 # =============================================================================
-# 1. SETUP
+# 1. SETUP (Windows/RStudio Compatible)
 # =============================================================================
 
-# Source the setup script
-source("scripts/00_setup.R")
+# Find and source the setup script (works from any working directory)
+local({
+  paths_to_try <- c(
+    "scripts/00_setup.R",
+    "00_setup.R",
+    "../scripts/00_setup.R"
+  )
+  if (requireNamespace("here", quietly = TRUE)) {
+    paths_to_try <- c(here::here("scripts", "00_setup.R"), paths_to_try)
+  }
+  for (p in paths_to_try) {
+    if (file.exists(p)) { source(p); return() }
+  }
+  stop("Cannot find 00_setup.R. Please set working directory to project root.")
+})
 
 # Load required packages
 library(limma)

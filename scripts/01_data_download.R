@@ -50,15 +50,39 @@
 # rm(list = ls())
 
 # Source the setup script to load packages and paths
-# Adjust path as needed for your system
-script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
-if (length(script_dir) == 0 || script_dir == "") {
-  script_dir <- "scripts"  # Fallback for non-RStudio execution
+# This works both in RStudio and command line on Windows
+get_setup_path <- function() {
+  # Method 1: Try rstudioapi if available
+  if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+    script_dir <- tryCatch({
+      dirname(rstudioapi::getActiveDocumentContext()$path)
+    }, error = function(e) "")
+    if (nzchar(script_dir)) {
+      setup_path <- file.path(dirname(script_dir), "scripts", "00_setup.R")
+      if (file.exists(setup_path)) return(setup_path)
+    }
+  }
+  
+  # Method 2: Try here package
+  if (requireNamespace("here", quietly = TRUE)) {
+    setup_path <- here::here("scripts", "00_setup.R")
+    if (file.exists(setup_path)) return(setup_path)
+  }
+  
+  # Method 3: Check relative paths
+  paths_to_try <- c(
+    "scripts/00_setup.R",           # From project root
+    "00_setup.R",                   # From scripts folder
+    "../scripts/00_setup.R"         # From other folders
+  )
+  for (p in paths_to_try) {
+    if (file.exists(p)) return(normalizePath(p, winslash = "/"))
+  }
+  
+  stop("Cannot find 00_setup.R. Please set working directory to project root.")
 }
-source(file.path(dirname(script_dir), "scripts", "00_setup.R"))
 
-# Alternatively, if running from project root:
-# source("scripts/00_setup.R")
+source(get_setup_path())
 
 # Load required packages
 library(GEOquery)
@@ -78,31 +102,121 @@ message("\n")
 message("Downloading GSE74764 from GEO...")
 message("This may take a few minutes depending on internet connection.\n")
 
-# Download the GEO dataset
-# getGEO() returns a list of ExpressionSet objects
-# GSE74764 should have one element corresponding to the GPL16699 platform
+# Increase timeout for large file downloads
+options(timeout = 600)  # 10 minutes
 
-gse <- tryCatch({
-  GEOquery::getGEO(
-    GEO = ANALYSIS_PARAMS$geo_accession,
-    destdir = PATHS$raw,
-    GSEMatrix = TRUE,      # Get the processed expression matrix
-    AnnotGPL = TRUE,       # Get annotation from GEO
-    getGPL = TRUE          # Download platform annotation
-  )
-}, error = function(e) {
-  message("Error downloading from GEO: ", e$message)
-  message("\nTrying alternative download method...")
+# Helper function to download with multiple methods
+download_geo_dataset <- function(geo_id, destdir) {
   
-  # Alternative: download directly
-  GEOquery::getGEO(
-    GEO = ANALYSIS_PARAMS$geo_accession,
-    destdir = PATHS$raw,
-    GSEMatrix = TRUE,
-    AnnotGPL = FALSE,
-    getGPL = TRUE
-  )
-})
+  # Method 1: Standard GEOquery with full annotations
+  message("Attempting download method 1 (full annotations)...")
+  result <- tryCatch({
+    GEOquery::getGEO(
+      GEO = geo_id,
+      destdir = destdir,
+      GSEMatrix = TRUE,
+      AnnotGPL = TRUE,
+      getGPL = TRUE
+    )
+  }, error = function(e) {
+    message("  Method 1 failed: ", e$message)
+    NULL
+  })
+  
+  if (!is.null(result)) return(result)
+  
+  # Method 2: Without annotations (faster)
+  message("\nAttempting download method 2 (no annotations)...")
+  result <- tryCatch({
+    GEOquery::getGEO(
+      GEO = geo_id,
+      destdir = destdir,
+      GSEMatrix = TRUE,
+      AnnotGPL = FALSE,
+      getGPL = FALSE
+    )
+  }, error = function(e) {
+    message("  Method 2 failed: ", e$message)
+    NULL
+  })
+  
+  if (!is.null(result)) return(result)
+  
+  # Method 3: Direct file download with curl/wget fallback
+  message("\nAttempting download method 3 (direct download)...")
+  
+  # Try to download the series matrix file directly
+  file_url <- paste0("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE74nnn/", 
+                     geo_id, "/matrix/", geo_id, "_series_matrix.txt.gz")
+  dest_file <- file.path(destdir, paste0(geo_id, "_series_matrix.txt.gz"))
+  
+  download_success <- tryCatch({
+    # Try different download methods
+    if (.Platform$OS.type == "windows") {
+      # Use wininet on Windows
+      download.file(file_url, dest_file, method = "wininet", mode = "wb", quiet = FALSE)
+    } else {
+      download.file(file_url, dest_file, method = "auto", mode = "wb", quiet = FALSE)
+    }
+    TRUE
+  }, error = function(e) {
+    message("  Direct download failed: ", e$message)
+    
+    # Try curl method
+    tryCatch({
+      download.file(file_url, dest_file, method = "curl", mode = "wb", quiet = FALSE)
+      TRUE
+    }, error = function(e2) {
+      message("  Curl download failed: ", e2$message)
+      FALSE
+    })
+  })
+  
+  if (download_success && file.exists(dest_file)) {
+    message("  File downloaded successfully. Loading...")
+    result <- tryCatch({
+      GEOquery::getGEO(filename = dest_file, getGPL = FALSE)
+    }, error = function(e) {
+      message("  Loading failed: ", e$message)
+      NULL
+    })
+    
+    if (!is.null(result)) {
+      # Wrap in list to match getGEO format
+      if (!is.list(result) || inherits(result, "ExpressionSet")) {
+        result <- list(result)
+      }
+      return(result)
+    }
+  }
+  
+  # Method 4: Check if file already exists from previous attempt
+  existing_file <- file.path(destdir, paste0(geo_id, "_series_matrix.txt.gz"))
+  if (file.exists(existing_file)) {
+    message("\nFound existing file from previous download. Loading...")
+    result <- tryCatch({
+      loaded <- GEOquery::getGEO(filename = existing_file, getGPL = FALSE)
+      if (!is.list(loaded) || inherits(loaded, "ExpressionSet")) {
+        loaded <- list(loaded)
+      }
+      loaded
+    }, error = function(e) {
+      message("  Failed to load existing file: ", e$message)
+      NULL
+    })
+    
+    if (!is.null(result)) return(result)
+  }
+  
+  # All methods failed
+  stop("All download methods failed. Please check your internet connection or try again later.\n",
+       "You can also manually download the file from:\n",
+       "  https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=", geo_id, "\n",
+       "Download 'Series Matrix File(s)' and save to: ", destdir)
+}
+
+# Download the GEO dataset
+gse <- download_geo_dataset(ANALYSIS_PARAMS$geo_accession, PATHS$raw)
 
 # The result is a list - extract the ExpressionSet
 if (is.list(gse) && length(gse) >= 1) {
