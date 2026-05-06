@@ -666,63 +666,82 @@ if (length(key_genes_present) >= 5) {
     )
   
   # Create heatmap of key genes
-  key_heatmap_data <- expr_gene[key_genes_present, ]
-  key_heatmap_scaled <- t(scale(t(key_heatmap_data)))
+  key_heatmap_data <- expr_gene[key_genes_present, , drop = FALSE]
+  key_gene_sd <- apply(key_heatmap_data, 1, sd, na.rm = TRUE)
+  key_heatmap_data <- key_heatmap_data[is.finite(key_gene_sd) & key_gene_sd > 0, , drop = FALSE]
   
-  # Save as PDF - call pheatmap directly in device context to avoid S4 issues
-  pdf(file.path(PATHS$figures, "Figure7_KeyGenes.pdf"), width = 8, height = 10)
-  pheatmap::pheatmap(
-    key_heatmap_scaled,
-    clustering_method = "complete",
-    clustering_distance_rows = "correlation",
-    clustering_distance_cols = "euclidean",
-    annotation_col = sample_anno,
-    annotation_colors = list(
-      cell_line = colors_cellline,
-      treatment = colors_treatment
-    ),
-    color = colorRampPalette(rev(brewer.pal(11, "RdBu")))(100),
-    breaks = seq(-2, 2, length.out = 101),
-    show_rownames = TRUE,
-    show_colnames = TRUE,
-    fontsize_row = 10,
-    fontsize_col = 9,
-    main = "Expression of Key Pathway Genes\n(Apoptosis, Stress Response, MAPK/AP-1)",
-    treeheight_row = 30,
-    treeheight_col = 20,
-    cellheight = 15,
-    cellwidth = 40
-  )
-  dev.off()
-  
-  # Save as PNG
-  png(file.path(PATHS$figures, "Figure7_KeyGenes.png"), 
-      width = 8, height = 10, units = "in", res = 300)
-  pheatmap::pheatmap(
-    key_heatmap_scaled,
-    clustering_method = "complete",
-    clustering_distance_rows = "correlation",
-    clustering_distance_cols = "euclidean",
-    annotation_col = sample_anno,
-    annotation_colors = list(
-      cell_line = colors_cellline,
-      treatment = colors_treatment
-    ),
-    color = colorRampPalette(rev(brewer.pal(11, "RdBu")))(100),
-    breaks = seq(-2, 2, length.out = 101),
-    show_rownames = TRUE,
-    show_colnames = TRUE,
-    fontsize_row = 10,
-    fontsize_col = 9,
-    main = "Expression of Key Pathway Genes\n(Apoptosis, Stress Response, MAPK/AP-1)",
-    treeheight_row = 30,
-    treeheight_col = 20,
-    cellheight = 15,
-    cellwidth = 40
-  )
-  dev.off()
-  
-  message("✓ Figure 7 saved")
+  if (nrow(key_heatmap_data) < 2) {
+    message("! Not enough variable key genes to plot Figure 7")
+  } else {
+    key_heatmap_scaled <- t(scale(t(key_heatmap_data)))
+    key_heatmap_scaled[!is.finite(key_heatmap_scaled)] <- 0
+    
+    render_key_heatmap <- function() {
+      pheatmap::pheatmap(
+        key_heatmap_scaled,
+        clustering_method = "complete",
+        clustering_distance_rows = "correlation",
+        clustering_distance_cols = "euclidean",
+        annotation_col = sample_anno,
+        annotation_colors = list(
+          cell_line = colors_cellline,
+          treatment = colors_treatment
+        ),
+        color = colorRampPalette(rev(brewer.pal(11, "RdBu")))(100),
+        breaks = seq(-2, 2, length.out = 101),
+        show_rownames = TRUE,
+        show_colnames = TRUE,
+        fontsize_row = 10,
+        fontsize_col = 9,
+        main = "Expression of Key Pathway Genes\n(Apoptosis, Stress Response, MAPK/AP-1)",
+        treeheight_row = 30,
+        treeheight_col = 20,
+        cellheight = 15,
+        cellwidth = 40
+      )
+    }
+    
+    save_key_heatmap <- function(device_fn, ...) {
+      ok <- TRUE
+      tryCatch(
+        {
+          device_fn(...)
+          render_key_heatmap()
+        },
+        error = function(e) {
+          ok <<- FALSE
+          message("! Figure 7 heatmap failed: ", e$message)
+        },
+        finally = {
+          if (grDevices::dev.cur() > 1) {
+            grDevices::dev.off()
+          }
+        }
+      )
+      ok
+    }
+    
+    pdf_ok <- save_key_heatmap(
+      grDevices::pdf,
+      file.path(PATHS$figures, "Figure7_KeyGenes.pdf"),
+      width = 8,
+      height = 10
+    )
+    png_ok <- save_key_heatmap(
+      grDevices::png,
+      file.path(PATHS$figures, "Figure7_KeyGenes.png"),
+      width = 8,
+      height = 10,
+      units = "in",
+      res = 300
+    )
+    
+    if (pdf_ok && png_ok) {
+      message("✓ Figure 7 saved")
+    } else {
+      message("! Figure 7 output incomplete")
+    }
+  }
 } else {
   message("! Insufficient key genes for Figure 7")
 }

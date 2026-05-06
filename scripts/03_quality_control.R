@@ -370,7 +370,7 @@ annotation_colors <- list(
 # Create correlation heatmap
 pdf(file.path(PATHS$figures_qc, "sample_correlation_heatmap.pdf"), 
     width = 10, height = 8)
-pheatmap(
+pheatmap::pheatmap(
   sample_cor,
   clustering_distance_rows = "euclidean",
   clustering_distance_cols = "euclidean",
@@ -393,7 +393,7 @@ dev.off()
 # Also save as PNG
 png(file.path(PATHS$figures_qc, "sample_correlation_heatmap.png"), 
     width = 10, height = 8, units = "in", res = ANALYSIS_PARAMS$plot_dpi)
-pheatmap(
+pheatmap::pheatmap(
   sample_cor,
   clustering_distance_rows = "euclidean",
   clustering_distance_cols = "euclidean",
@@ -459,7 +459,7 @@ expr_scaled <- t(scale(t(expr_top_var)))
 # Create heatmap
 pdf(file.path(PATHS$figures_qc, "heatmap_top_variable_genes.pdf"), 
     width = 10, height = 12)
-pheatmap(
+pheatmap::pheatmap(
   expr_scaled,
   clustering_distance_rows = "correlation",
   clustering_distance_cols = "euclidean",
