@@ -798,7 +798,7 @@ top50_genes <- de_results[["Interaction"]] %>%
   arrange(P.Value) %>%
   head(50) %>%
   pull(gene)
-
+-
 if (length(top50_genes) > 10) {
   top50_genes <- top50_genes[top50_genes %in% rownames(expr_gene)]
   top50_data <- expr_gene[top50_genes, ]
