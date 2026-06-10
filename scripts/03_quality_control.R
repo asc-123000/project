@@ -29,7 +29,7 @@
 #   4. NORMALIZATION VERIFICATION: We're using pre-processed data,
 #      so we must verify the normalization is adequate.
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

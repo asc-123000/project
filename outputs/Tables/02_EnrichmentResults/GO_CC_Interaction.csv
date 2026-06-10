@@ -1,0 +1,2 @@
+"ID","Description","GeneRatio","BgRatio","RichFactor","FoldEnrichment","zScore","pvalue","p.adjust","qvalue","geneID","Count"
+"GO:0008180","COP9 signalosome","2/12","30/15613",0.0666666666666667,86.7388888888889,13.0363682241524,0.000232768675890802,0.0135005832016665,0.011025884647459,"HSPA1A/HSPA6",2

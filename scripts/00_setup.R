@@ -14,7 +14,7 @@
 #   environment. This script ensures all dependencies are available and 
 #   establishes consistent settings across all analysis scripts.
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 #######################################################

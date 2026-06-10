@@ -28,7 +28,7 @@
 #   3. This script verifies the quality of the pre-processed data and
 #      prepares it for differential expression analysis.
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

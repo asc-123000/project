@@ -37,7 +37,7 @@
 #   If QC reveals problems with the processed data, we can revisit
 #   this decision and implement raw data preprocessing.
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

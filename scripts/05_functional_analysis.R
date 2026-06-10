@@ -39,7 +39,7 @@
 #      - Membrane potential disruption
 #      - Oxidative phosphorylation
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

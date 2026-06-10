@@ -1,0 +1,64 @@
+================================================================================
+DIFFERENTIAL EXPRESSION ANALYSIS REPORT
+================================================================================
+
+Date: 2026-03-08 15:26:52
+Dataset: GSE74764
+
+STATISTICAL MODEL
+-----------------
+Model: Cell-means model (Expression ~ 0 + Group)
+Groups: HDF_Mock, HDF_TP4, MDA-MB-231_Mock, MDA-MB-231_TP4
+Method: limma with empirical Bayes moderation
+Multiple testing: Benjamini-Hochberg FDR
+
+THRESHOLDS
+----------
+FDR: < 0.05
+Log2 Fold-Change: > 0.585 (1.5-fold)
+
+RESULTS SUMMARY
+---------------
+             Contrast Total_Tested Sig_FDR Sig_FDR_FC   Up Down
+1          TP4_in_MDA        29380     188        188  165   23
+2          TP4_in_HDF        29380       2          2    0    2
+3 MDA_vs_HDF_baseline        29380    6014       6014 2052 3962
+4         Interaction        29380      15         15   15    0
+
+KEY FINDINGS
+------------
+1. TP4 effect in TNBC (MDA-MB-231): 188 DEGs
+2. TP4 effect in normal (HDF): 2 DEGs
+3. TNBC-specific TP4 response (Interaction): 15 DEGs
+
+INTERPRETATION
+--------------
+The INTERACTION contrast identifies genes that respond differently to TP4
+in cancer cells vs normal fibroblasts. These genes are candidates for
+explaining TP4's selective anticancer activity.
+
+- Positive interaction logFC: Gene MORE induced by TP4 in TNBC
+- Negative interaction logFC: Gene MORE suppressed by TP4 in TNBC
+
+GENE OVERLAPS
+-------------
+MDA-specific response: 188 genes
+HDF-specific response: 2 genes
+Common response: 0 genes
+
+CAVEATS
+-------
+1. Small sample size (n=2 per group) limits statistical power
+2. Results are hypothesis-generating, not definitive
+3. Validation in independent datasets is recommended
+
+OUTPUT FILES
+------------
+1. DE_[contrast]_full.csv - Complete results for each contrast
+2. DE_[contrast]_significant.csv - Significant genes only
+3. volcano_[contrast].pdf/png - Volcano plots
+4. MA_plots.pdf - MA plots
+5. pvalue_distributions.pdf - P-value histograms
+
+================================================================================
+

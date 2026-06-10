@@ -22,7 +22,7 @@
 #   - Format: PDF (vector) and PNG (raster)
 #   - Dimensions: Appropriate for single/double column
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

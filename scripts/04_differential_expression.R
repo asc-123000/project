@@ -56,7 +56,7 @@
 #      Less stringent than the typical 2-fold cutoff to capture
 #      biologically meaningful responses despite limited replication.
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################

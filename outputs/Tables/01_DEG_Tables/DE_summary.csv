@@ -1,0 +1,5 @@
+"Contrast","Total_Tested","Sig_FDR","Sig_FDR_FC","Up","Down"
+"TP4_in_MDA",29380,188,188,165,23
+"TP4_in_HDF",29380,2,2,0,2
+"MDA_vs_HDF_baseline",29380,6014,6014,2052,3962
+"Interaction",29380,15,15,15,0

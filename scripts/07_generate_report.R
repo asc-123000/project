@@ -13,7 +13,7 @@
 #   4. Save session information
 #   5. Create final output tables
 #
-# Author: Computational Biology Pipeline
+# Author: A. S. Abouzeid
 # Date: 2026-01-19
 #
 ################################################################################
